@@ -1,9 +1,25 @@
 import React from "react";
 import RecoInput from "./components/RecoInput";
+import Navbar from "./components/navbar";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navbar/>,
+  },
+  {
+    path: "/recommend",
+    element: <RecoInput/>,
+  },
+]);
 
 function App() {
   return (
-      <RecoInput/>
+      <RouterProvider router={router} />
   );
 }
 
