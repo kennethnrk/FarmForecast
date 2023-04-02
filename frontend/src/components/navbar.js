@@ -20,10 +20,10 @@ function navigationbar({loggedIn}) {
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 {!loggedIn ? <Navbar.Collapse id="navbarScroll">
                     <Nav style={{marginLeft: 'auto'}}>
-                        <Nav.Link href="/login" style={styles.Navlink}>Login</Nav.Link>
+                        <Nav.Link href="/recommend" style={styles.Navlink}>Recommend</Nav.Link>
                     </Nav>
                     <Nav className="d-flex">
-                        <Nav.Link href="/usersignup" style={styles.Navlink2 }>SignUp</Nav.Link>
+                        <Nav.Link href="/predict" style={styles.Navlink2 }>Predict</Nav.Link>
                     </Nav>
 
                 </Navbar.Collapse>: <Navbar.Collapse>

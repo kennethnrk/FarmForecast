@@ -33,7 +33,14 @@ function RecoInput(props) {
     const [state, dispatch] = useReducer(reducer, { P: 0 , K : 0 , N :0, PH: 0, temp:0 , humidity: 0, rainfall: 0 , locationState: 0, locationSeason: 0 , area: 0 ,alerttxt: ''});
 
     const submit = async () =>{
+        if(false)
+        {
 
+        }
+        else
+        {
+
+        }
 
     }
     return (
