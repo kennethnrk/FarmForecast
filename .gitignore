@@ -1,2 +1,6 @@
 /RandomForestCropRecommendation.pkl
 /RandomForestYieldPrediction.pkl
+/reco_scaler.pkl
+/random.ipynb
+/LabelEnc.pkl
+/yield_scaler.pkl
