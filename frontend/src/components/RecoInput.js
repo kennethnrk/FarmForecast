@@ -6,9 +6,11 @@ import Submitbtn from "../subcomponents/submitbtn";
 import Formlabel from "../subcomponents/formlabel";
 import Inputbox from "../subcomponents/inputbox";
 import { SeasonList, StateList } from "../subcomponents/consts";
+import { useNavigate } from "react-router-dom";
 
 function RecoInput(props) {
 
+    const navigate = useNavigate();
 
     function reducer(currentState, action) {
 
@@ -30,7 +32,7 @@ function RecoInput(props) {
     }
 
 
-    const [state, dispatch] = useReducer(reducer, { P: 0 , K : 0 , N :0, ph: 0, temperature:0 , humidity: 0, rainfall: 0 , locationState: '', locationSeason: '' , Area: 0 ,alerttxt: ''});
+    const [state, dispatch] = useReducer(reducer, { P: 0 , K : 0 , N :0, ph: 0, temperature:0 , humidity: 0, rainfall: 0 , locationState: StateList[0], locationSeason: SeasonList[0] , Area: 0 ,alerttxt: ''});
 
     const submit = async () =>{
         if(state.N > 140 || state.N < 0)
@@ -52,25 +54,25 @@ function RecoInput(props) {
         }else if(state.ph > 9 || state.ph < 3)
         {
             updateAlert("Enter valid PH");
-        }else if(state.rainfall > 200 || state.rainfall < 20)
+        }else if(state.rainfall > 300 || state.rainfall < 20)
         {
-            updateAlert("Rainfall has to be between 20 and 200");
-        }else if(state.Area == 0)
+            updateAlert("Rainfall has to be between 20 and 300");
+        }else if(state.Area === 0)
         {
             updateAlert("Area cannot be blank!");
         }
         else
         {
-            updateAlert('All izz well')
+            navigate('/output', { state: { payload: state}})
         }
 
     }
 
     const stateOptions =  StateList.map((item)=>
-            <option key={item} value="{item}">{item}</option>
+            <option key={item} value={item}>{item}</option>
         )
     const seasonOptions =  SeasonList.map((item)=>
-            <option key={item} value="{item}">{item}</option>
+            <option key={item} value={item}>{item}</option>
         )
 
 

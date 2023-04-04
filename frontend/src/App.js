@@ -1,5 +1,6 @@
 import React from "react";
 import RecoInput from "./components/RecoInput";
+import Output from "./components/Output";
 import Navbar from "./components/navbar";
 import {
   createBrowserRouter,
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: "/recommend",
     element: <RecoInput/>,
+  },
+  {
+    path: "/output",
+    element: <Output/>,
   },
 ]);
 

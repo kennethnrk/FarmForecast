@@ -14,7 +14,7 @@ function Submitbtn({text, secondary, onPress}) {
     else {
         return (
             <div className="d-grid">
-                <button type="submit" style={styles.submitbtn} class="btn" onClick={onPress}>
+                <button type="submit" style={styles.submitbtn} className="btn" onClick={onPress}>
                     {text}
                 </button>
             </div>
