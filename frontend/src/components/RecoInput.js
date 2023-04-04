@@ -57,7 +57,7 @@ function RecoInput(props) {
         }else if(state.rainfall > 300 || state.rainfall < 20)
         {
             updateAlert("Rainfall has to be between 20 and 300");
-        }else if(state.Area === 0)
+        }else if(state.Area <= 0)
         {
             updateAlert("Area cannot be blank!");
         }
