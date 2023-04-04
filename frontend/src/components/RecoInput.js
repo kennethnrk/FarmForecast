@@ -1,11 +1,11 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useReducer } from 'react';
 import Navbar from "./navbar";
 import { Col, Row } from "react-bootstrap";
 import backgroungImg from "../assets/background.jpg";
 import Submitbtn from "../subcomponents/submitbtn";
 import Formlabel from "../subcomponents/formlabel";
 import Inputbox from "../subcomponents/inputbox";
-
+import { SeasonList, StateList } from "../subcomponents/consts";
 
 function RecoInput(props) {
 
@@ -30,19 +30,51 @@ function RecoInput(props) {
     }
 
 
-    const [state, dispatch] = useReducer(reducer, { P: 0 , K : 0 , N :0, PH: 0, temp:0 , humidity: 0, rainfall: 0 , locationState: 0, locationSeason: 0 , area: 0 ,alerttxt: ''});
+    const [state, dispatch] = useReducer(reducer, { P: 0 , K : 0 , N :0, ph: 0, temperature:0 , humidity: 0, rainfall: 0 , locationState: '', locationSeason: '' , Area: 0 ,alerttxt: ''});
 
     const submit = async () =>{
-        if(false)
+        if(state.N > 140 || state.N < 0)
         {
-
+            updateAlert("N has to be between 0 and 140");
+        }
+        else if(state.P > 145 || state.P < 5)
+        {
+            updateAlert("P has to be between 5 and 145");
+        }else if(state.K > 205 || state.K < 5)
+        {
+            updateAlert("K has to be between 5 and 205");
+        }else if(state.temperature > 43 || state.temperature < 8)
+        {
+            updateAlert("Temperature has to be between 8 and 43");
+        }else if(state.humidity > 99 || state.humidity < 14)
+        {
+            updateAlert("Humidity has to be between 14 and 99");
+        }else if(state.ph > 9 || state.ph < 3)
+        {
+            updateAlert("Enter valid PH");
+        }else if(state.rainfall > 200 || state.rainfall < 20)
+        {
+            updateAlert("Rainfall has to be between 20 and 200");
+        }else if(state.Area == 0)
+        {
+            updateAlert("Area cannot be blank!");
         }
         else
         {
-
+            updateAlert('All izz well')
         }
 
     }
+
+    const stateOptions =  StateList.map((item)=>
+            <option key={item} value="{item}">{item}</option>
+        )
+    const seasonOptions =  SeasonList.map((item)=>
+            <option key={item} value="{item}">{item}</option>
+        )
+
+
+
     return (
         <>
             <Navbar/>
@@ -93,7 +125,7 @@ function RecoInput(props) {
                                                           className="form-control"
                                                           placeholder="Ph Levels"
                                                           onChange={(iptv)=>{
-                                                              updateForm('PH', iptv)
+                                                              updateForm('ph', iptv)
                                                           }}
                                         />
                                     </Col>
@@ -111,7 +143,7 @@ function RecoInput(props) {
                                               className="form-control"
                                               placeholder="Degree Celsius"
                                               onChange={(iptv)=>{
-                                                  updateForm('temp', iptv)
+                                                  updateForm('temperature', iptv)
                                               }}
                                     />
                                 </Col>
@@ -166,10 +198,7 @@ function RecoInput(props) {
                                             updateForm('locationState', iptv)
                                         }
                                     }>
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        {stateOptions}
                                     </select>
                                 </Col>
                             </Row>
@@ -181,10 +210,7 @@ function RecoInput(props) {
                                             updateForm('locationSeason', iptv)
                                         }
                                     }>
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        {seasonOptions}
                                     </select>
                                 </Col>
                             </Row>
@@ -195,7 +221,7 @@ function RecoInput(props) {
                                               className="form-control"
                                               placeholder="Area of the field"
                                               onChange={(iptv)=>{
-                                                  updateForm('area', iptv)
+                                                  updateForm('Area', iptv)
                                               }}
                                     />
                                 </Col>
