@@ -21,8 +21,8 @@ The application is designed to be user-friendly, with an intuitive interface tha
 To install the application, follow these steps:
 
 1. Clone the repository to your local machine
-2. Navigate to the backend directory and install the required dependencies using `pip install -r requirements.txt`
-3. Start the backend server using `uvicorn main:app --reload`
+2. Navigate to the backend directory and install the required dependencies
+3. Start the backend server using `uvicorn index:app --reload`
 4. Navigate to the frontend directory and install the required dependencies using `npm install`
 5. Start the frontend server using `npm start`
 
