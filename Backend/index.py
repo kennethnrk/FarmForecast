@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 import gc
 from fastapi.middleware.cors import CORSMiddleware
+from constants import SeasonList
+from constants import CropList
 
 app = FastAPI()
 
@@ -67,6 +69,51 @@ async def index():
     return {"message": "Hello World"}
 
 
+# @app.post("/recommend")
+# async def recommend(pr_data: PredictionData):
+#     rfc = joblib.load('../RandomForestCropRecommendation.pkl')
+#     scaler = joblib.load('../reco_scaler.pkl')
+#     le = joblib.load("../LabelEnc.pkl")
+#     ohe = joblib.load('../YieldOneHot.pkl')
+#     yield_scaler = joblib.load('../yield_scaler.pkl')
+#     RFYC = joblib.load('../RandomForestYieldPrediction.pkl')
+#
+#     reco = pr_data.recommendation
+#     yield_d = pr_data.yieldData
+#     reco_to_predict = [[
+#         reco.N,
+#         reco.P,
+#         reco.K,
+#         reco.temperature,
+#         reco.humidity,
+#         reco.ph,
+#         reco.rainfall,
+#     ]]
+#     reco_to_predict = scaler.transform(reco_to_predict)
+#     reco_output = rfc.predict(reco_to_predict)
+#     reco_output = le.inverse_transform(reco_output)
+#
+#     yield_area = yield_d.Area
+#     yield_to_predict = {'Season': [yield_d.Season], 'Crop': reco_output, 'State_Name': [yield_d.State_Name]}
+#
+#     yield_to_predict = pd.DataFrame.from_dict(yield_to_predict)
+#
+#     yield_to_predict = ohe.transform(yield_to_predict[["Season", "Crop", "State_Name"]])
+#     yield_to_predict = np.hstack((yield_to_predict, [[yield_area]]))
+#     yield_to_predict = yield_scaler.transform(yield_to_predict)
+#     opt = RFYC.predict(yield_to_predict)
+#
+#     del rfc
+#     del scaler
+#     del le
+#     del ohe
+#     del yield_scaler
+#     del RFYC
+#     gc.collect()
+#
+#     return {'success': True, 'data': {'recommendation': reco_output[0], 'yield_d': opt[0]}}
+
+
 @app.post("/recommend")
 async def recommend(pr_data: PredictionData):
     rfc = joblib.load('../RandomForestCropRecommendation.pkl')
@@ -75,6 +122,14 @@ async def recommend(pr_data: PredictionData):
     ohe = joblib.load('../YieldOneHot.pkl')
     yield_scaler = joblib.load('../yield_scaler.pkl')
     RFYC = joblib.load('../RandomForestYieldPrediction.pkl')
+
+    def predictYield(y_to_p):
+        y_to_p = pd.DataFrame.from_dict(y_to_p)
+
+        y_to_p = ohe.transform(y_to_p[["Season", "Crop", "State_Name"]])
+        y_to_p = np.hstack((y_to_p, [[yield_area]]))
+        y_to_p = yield_scaler.transform(y_to_p)
+        return RFYC.predict(y_to_p)[0]
 
     reco = pr_data.recommendation
     yield_d = pr_data.yieldData
@@ -92,14 +147,26 @@ async def recommend(pr_data: PredictionData):
     reco_output = le.inverse_transform(reco_output)
 
     yield_area = yield_d.Area
+
     yield_to_predict = {'Season': [yield_d.Season], 'Crop': reco_output, 'State_Name': [yield_d.State_Name]}
 
-    yield_to_predict = pd.DataFrame.from_dict(yield_to_predict)
+    opt = predictYield(yield_to_predict)
 
-    yield_to_predict = ohe.transform(yield_to_predict[["Season", "Crop", "State_Name"]])
-    yield_to_predict = np.hstack((yield_to_predict, [[yield_area]]))
-    yield_to_predict = yield_scaler.transform(yield_to_predict)
-    opt = RFYC.predict(yield_to_predict)
+    season_predict = dict()
+
+    for item in SeasonList:
+        yield_to_predict = {'Season': [item], 'Crop': reco_output, 'State_Name': [yield_d.State_Name]}
+
+        season_predict[item] = predictYield(yield_to_predict)
+
+    cinx = CropList.index(reco_output[0])
+
+    alternative_crops = {reco_output[0]: opt}
+    for i in range(cinx + 1, cinx + 6):
+        yield_to_predict = {'Season': [yield_d.Season], 'Crop': CropList[i], 'State_Name': [yield_d.State_Name]}
+
+        al_opt = predictYield(yield_to_predict)
+        alternative_crops[CropList[i]] = al_opt
 
     del rfc
     del scaler
@@ -108,5 +175,6 @@ async def recommend(pr_data: PredictionData):
     del yield_scaler
     del RFYC
     gc.collect()
-
-    return {'success':True, 'data':{'recommendation': reco_output[0], 'yield_d': opt[0]}}
+    print('here')
+    return {'success': True, 'data': {'recommendation': reco_output[0], 'yield_d': opt, 'Seasonal': season_predict,
+                                      'Alternative': alternative_crops}}

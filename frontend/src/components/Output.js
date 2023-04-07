@@ -36,7 +36,7 @@ function Output(props) {
             performRecoPred(payload).then((response)=>
             {
                 setRecommendation(response.data.recommendation)
-                setYield_d(response.data.yield_d)
+                setYield_d(response.data.yield_d.toFixed(2))
                 setLoading(false)
             })
 
@@ -66,9 +66,9 @@ function Output(props) {
                 <Navbar/>
                 <div style={styles.bodydiv}>
                     <div style={styles.loading}>
-                        Recommended Crop={recommendation}
+                        Recommended Crop = {recommendation}
                         <br/>
-                        Predicted Yield = {yield_d}
+                        Predicted Yield = {yield_d} kg
                     </div>
                 </div>
             </>
