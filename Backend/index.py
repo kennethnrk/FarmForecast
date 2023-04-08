@@ -166,7 +166,8 @@ async def recommend(pr_data: PredictionData):
         yield_to_predict = {'Season': [yield_d.Season], 'Crop': CropList[i], 'State_Name': [yield_d.State_Name]}
 
         al_opt = predictYield(yield_to_predict)
-        alternative_crops[CropList[i]] = al_opt
+        if al_opt - opt < 100000:
+            alternative_crops[CropList[i]] = al_opt
 
     del rfc
     del scaler
