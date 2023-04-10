@@ -194,6 +194,7 @@ const styles = {
             fontFamily: 'Jaldi',
             fontWeight: 'Bold',
             height: '15vh',
+            textAlign: 'left',
         },
     ttWrapper:
         {
