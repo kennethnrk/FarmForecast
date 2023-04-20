@@ -1,7 +1,7 @@
 import React from "react";
 import RecoInput from "./components/RecoInput";
 import Output from "./components/Output";
-import Navbar from "./components/navbar";
+import Landing from "./components/landing"
 import {
   createBrowserRouter,
   RouterProvider,
@@ -10,7 +10,7 @@ import {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navbar/>,
+    element: <Landing/>,
   },
   {
     path: "/recommend",
