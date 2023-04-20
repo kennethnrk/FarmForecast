@@ -1,5 +1,6 @@
 import React from "react";
 import RecoInput from "./components/RecoInput";
+import PredictInput from "./components/PredictInput";
 import Output from "./components/Output";
 import Landing from "./components/landing"
 import {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/recommend",
     element: <RecoInput/>,
+  },
+  {
+    path: "/predict",
+    element: <PredictInput/>,
   },
   {
     path: "/output",
