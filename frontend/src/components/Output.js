@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { performRecoPred } from "../APIcalls/calls";
+import { performRecoPred, performPredOnly } from "../APIcalls/calls";
 import Navbar from "./navbar";
 import { BarChart, LineChart } from "../subcomponents/Charts";
 import rice from '../assets/OutputPics/rice.jpg'
@@ -16,42 +16,66 @@ function Output(props) {
     const [recommendation, setRecommendation] =  useState("")
     const [yield_d, setYield_d] =  useState(0)
     const [loading, setLoading] =  useState(true)
+    const [onlyPred, setOnlyPred] =  useState(false)
     const [seasonal, setSeasonal] = useState({})
     const [alternative, setAlternative] = useState({})
 
     useEffect(()=>
     {
         if(state?.payload){
-            // console.log(state.payload)
-            const payload = {
-                "recommendation": {
-                    "N": state.payload.N,
-                    "P": state.payload.P,
-                    "K": state.payload.K,
-                    "temperature": state.payload.temperature,
-                    "humidity": state.payload.humidity,
-                    "ph": state.payload.ph,
-                    "rainfall": state.payload.rainfall
-                },
-                "yieldData": {
-                    "State_Name": state.payload.locationState,
-                    "Season": state.payload.locationSeason,
-                    "Area": state.payload.Area
-                }
-            }
-
-            performRecoPred(payload).then((response)=>
+            if(state?.predictOnly && state.predictOnly == true)
             {
-                setRecommendation(response.data.recommendation)
-                setYield_d(response.data.yield_d.toFixed(2))
+                setOnlyPred(true);
+                const payload = {
+                    "cropName": state.payload.Crop,
+                    "yieldData": {
+                        "State_Name": state.payload.locationState,
+                        "Season": state.payload.locationSeason,
+                        "Area": state.payload.Area
+                    }
+                }
+                console.log(payload)
+                performPredOnly(payload).then((response)=>
+                {
+                    setRecommendation(response.data.recommendation)
+                    setYield_d(response.data.yield_d.toFixed(2))
 
-                setSeasonal(response.data.Seasonal)
-                setAlternative(response.data.Alternative)
+                    setSeasonal(response.data.Seasonal)
+                    setAlternative(response.data.Alternative)
 
-                setLoading(false)
-            })
+                    setLoading(false)
+                })
+            }
+            else
+            {
+                const payload = {
+                    "recommendation": {
+                        "N": state.payload.N,
+                        "P": state.payload.P,
+                        "K": state.payload.K,
+                        "temperature": state.payload.temperature,
+                        "humidity": state.payload.humidity,
+                        "ph": state.payload.ph,
+                        "rainfall": state.payload.rainfall
+                    },
+                    "yieldData": {
+                        "State_Name": state.payload.locationState,
+                        "Season": state.payload.locationSeason,
+                        "Area": state.payload.Area
+                    }
+                }
 
+                performRecoPred(payload).then((response)=>
+                {
+                    setRecommendation(response.data.recommendation)
+                    setYield_d(response.data.yield_d.toFixed(2))
 
+                    setSeasonal(response.data.Seasonal)
+                    setAlternative(response.data.Alternative)
+
+                    setLoading(false)
+                })
+            }
         }
         else {
             navigate('/recommend')
@@ -87,7 +111,7 @@ function Output(props) {
                             <div style={styles.outputCard}>
                                 <div style={styles.ttWrapper}>
                                     <div style={styles.titleText}>
-                                        Recommended Crop = {recommendation}
+                                        {onlyPred ? "Your Crop": "Recommended Crop" } = {recommendation}
                                     </div>
                                     <div style={styles.titleText}>
 
