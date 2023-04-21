@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { performRecoPred, performPredOnly } from "../APIcalls/calls";
 import Navbar from "./navbar";
 import { BarChart, LineChart } from "../subcomponents/Charts";
-import rice from '../assets/OutputPics/rice.jpg'
+import { ImageLinks } from "../subcomponents/consts";
 import { Col, Row } from "react-bootstrap";
 
 function Output(props) {
@@ -19,6 +19,7 @@ function Output(props) {
     const [onlyPred, setOnlyPred] =  useState(false)
     const [seasonal, setSeasonal] = useState({})
     const [alternative, setAlternative] = useState({})
+    const [imgLink, setImgLink] = useState('')
 
     useEffect(()=>
     {
@@ -43,7 +44,9 @@ function Output(props) {
                     setSeasonal(response.data.Seasonal)
                     setAlternative(response.data.Alternative)
 
+                    setImgLink(ImageLinks[state.payload.Crop])
                     setLoading(false)
+
                 })
             }
             else
@@ -73,6 +76,7 @@ function Output(props) {
                     setSeasonal(response.data.Seasonal)
                     setAlternative(response.data.Alternative)
 
+                    setImgLink(ImageLinks[response.data.recommendation])
                     setLoading(false)
                 })
             }
@@ -103,7 +107,7 @@ function Output(props) {
                     <Row>
                         <Col sm={5} >
                             <div style={styles.outputCard}>
-                                <img src={rice} style={{height:'30vh', maxWidth:'50vw'}}/>
+                                <img src={imgLink} style={{height:'30vh', maxWidth:'50vw'}}/>
                             </div>
 
                         </Col>
