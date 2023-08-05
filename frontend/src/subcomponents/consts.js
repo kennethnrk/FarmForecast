@@ -134,7 +134,7 @@ export const CropList = ['Arecanut',
 export const ImageLinks = {
     'Arecanut': 'https://5.imimg.com/data5/SELLER/Default/2021/4/AI/XU/QE/8387819/arecanut-1000x1000.png',
     'Other Kharif pulses': 'https://live.staticflickr.com/8721/28466326395_d33b68ca85_z.jpg',
-    'rice': 'https://tse3.mm.bing.net/th?id=OIP._wQfHMqK00-Botm4s8z0vwHaFj&pid=Api&P=0',
+    'Rice': 'https://tse3.mm.bing.net/th?id=OIP._wQfHMqK00-Botm4s8z0vwHaFj&pid=Api&P=0',
     'Banana': 'https://tse4.mm.bing.net/th?id=OIP.hBd5NqxuSoDhAI1k5E7WKwHaE8&pid=Api&P=0',
     'Cashewnut': 'https://tse4.mm.bing.net/th?id=OIP.l7hoZ6DbiY6jdnb5PPH7DwHaHa&pid=Api&P=0',
     'cocunut': 'https://tse2.mm.bing.net/th?id=OIP.-NYj78iOSNzZx43RanjepQHaF0&pid=Api&P=0',
